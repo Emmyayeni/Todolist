@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+</head>
+<body>
+<div class="box" id="heading">
+    <h1>Todo list </h1>
+</div>
+
+<div class="box" id="content">
+
+       
+</div>
+    <form id="form">
+        <input type="text" name="newItem" placeholder="New Item" value="" autocomplete="off" id="inp">
+
+        <button type="submit" id="addbtn" name="list" value="">+</button>
+    </form>
+
+</div>
+</body>
+<script>
+    var form = document.getElementById('form')
+    var task = document.getElementById('inp').focus()
+    var content = document.getElementById('content')
+    function del(etd){
+       var ele = tod_list[etd]
+       var my_list = JSON.parse(localStorage.getItem('mylist'))
+       my_list.pop(etd)
+       localStorage.setItem('mylist',JSON.stringify(my_list))
+       location.reload()
+    }
+    function checked(index) {
+    var tasks= JSON.parse(localStorage.getItem('mylist'))
+    if (tasks[index].status == true) {
+      tasks[index].status = false;
+      localStorage.setItem("mylist", JSON.stringify(tasks));
+    } else {
+      tasks[index].status = true;
+      localStorage.setItem("mylist", JSON.stringify(tasks));
+    }
+  }
+    list = []
+    form.addEventListener('submit',(e)=>{
+        e.preventDefault()
+        if (form.newItem.value !=""){
+            let task = {
+                id: new Date().getTime(),
+                task: form.newItem.value,
+                status: false,
+            };
+            list.push(task)
+            console.log(list)
+            if (localStorage.getItem('mylist') != undefined){
+                var my_list = JSON.parse(localStorage.getItem('mylist'))
+                my_list.push(task)
+                console.log(my_list)
+                localStorage.setItem('mylist',JSON.stringify(my_list))
+
+            }else{
+                localStorage.setItem('mylist',JSON.stringify(list))
+            }
+            location.reload()
+            task = ''
+            task.focus()
+        }else{
+            alert('you cannot enter an empty space ')
+        }
+        
+    })
+    // var checke = document.getElementById('input')
+    // checke.addEventListener('change',(e)=>{
+    //     if (checke.checked()){
+    //         checke.name = 
+    //     }
+    // })
+    var tod_list = JSON.parse(localStorage.getItem('mylist'))
+        for (var item in tod_list){     
+
+           
+            if (tod_list[item].status == true){
+                ele = ` 
+                  
+                    <div class="item tooltip"><span class="tooltiptext">Completed</span><input id="${item}" class='checked' type="checkbox" onchange='checked(${item})' checked> <label for="${item}" >${tod_list[item]['task']}<button class="delete-btn" onclick="del(${item})"><img src='./icons8-trash-24.png'></button><label>
+                    </div
+                    `
+                    content.insertAdjacentHTML('beforeend',ele)
+            }else{
+                ele = `<div class="item tooltip" ><span class="tooltiptext">pending</span>
+                <div class="item tooltip"><input id="${item}" class='checked' type="checkbox" onchange='checked(${item})' > <label for="${item}" >${tod_list[item]['task']}<button class="delete-btn" onclick="del(${item})"><img src='./icons8-trash-24.png'></button><label></div`
+            content.insertAdjacentHTML('beforeend',ele)
+            }
+
+
+        }
+    var checke = document.querySelectorAll('.checked')
+    for (let index = 0; index < checke.length; index++) {
+        
+        checke[index].addEventListener('change',()=>{
+        checked(checke[index].id)
+        location.reload()
+    })
+        
+    }
+    
+    
+
+
+        
+</script>
+</html>
